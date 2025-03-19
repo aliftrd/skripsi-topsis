@@ -103,7 +103,7 @@ class CalculationController extends Controller
             $matrix[$citizen->code] = [];
 
             foreach ($criterias as $criteria) {
-                $value = $citizen->subCriterias->firstWhere('criteria.code', $criteria->code)->weight;
+                $value = $citizen->subCriterias->firstWhere('criteria.code', $criteria->code)?->weight;
                 $matrix[$citizen->code][$criteria->code] = round($matrixRij[$citizen->code][$criteria->code] * $value, 3);
             }
         }

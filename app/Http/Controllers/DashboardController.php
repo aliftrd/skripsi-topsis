@@ -38,6 +38,8 @@ class DashboardController extends Controller
             ->pluck('year')
             ->toArray();
 
+        if (empty($availableYears)) return [now()->year];
+
         $maxYear = !empty($availableYears) ? max($availableYears) : now()->year;
 
         $targetYears = range($maxYear, $maxYear + 2);

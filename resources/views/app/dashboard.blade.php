@@ -132,38 +132,43 @@
         $groupedCitizenByStageLabel = $groupedCitizenByStage
             ->pluck('stage')
             ->map(function ($stage) {
-                return $stage ? __('dashboard.columns.stage') . $stage : __('general.label.unavailable');
+                return $stage ? __('dashboard.columns.stage') . " $stage" : __('general.label.unavailable');
             })
             ->toArray();
         $groupedCitizenByStageCount = $groupedCitizenByStage->pluck('total')->toArray();
         $groupedCitizenByRTLabel = $groupedCitizenByRT
             ->pluck('rt')
             ->map(function ($stage) {
-                return $stage ? __('dashboard.columns.rt') . $stage : __('general.label.unavailable');
+                return $stage ? __('dashboard.columns.rt') . " $stage" : __('general.label.unavailable');
             })
             ->toArray();
         $groupedCitizenByRTCount = $groupedCitizenByRT->pluck('total')->toArray();
     @endphp
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            new Chart(document.getElementById("stage-chart"), {
-                type: "doughnut",
-                data: {
-                    labels: {!! json_encode($groupedCitizenByStageLabel) !!},
-                    datasets: [{
-                        label: `{!! __('dashboard.label.number-per-stage') !!}`,
-                        data: {!! json_encode($groupedCitizenByStageCount) !!},
-                        backgroundColor: [
-                            "rgb(255, 99, 132)",
-                            "rgb(54, 162, 235)",
-                            "rgb(255, 205, 86)",
-                            "rgb(75, 192, 192)",
-                            "rgb(153, 102, 255)",
-                            "rgb(255, 159, 64)"
-                        ]
-                    }]
-                }
-            });
+            var stageChartCanvas = document.getElementById("stage-chart");
+
+            if (stageChartCanvas) {
+                new Chart(stageChartCanvas, {
+                    type: "doughnut",
+                    data: {
+                        labels: {!! json_encode($groupedCitizenByStageLabel ?? []) !!},
+                        datasets: [{
+                            label: `{!! __('dashboard.label.number-per-stage') !!}`,
+                            data: {!! json_encode($groupedCitizenByStageCount ?? []) !!},
+                            backgroundColor: [
+                                "rgb(255, 99, 132)",
+                                "rgb(54, 162, 235)",
+                                "rgb(255, 205, 86)",
+                                "rgb(75, 192, 192)",
+                                "rgb(153, 102, 255)",
+                                "rgb(255, 159, 64)"
+                            ]
+                        }]
+                    }
+                });
+            }
+
             new Chart(document.getElementById("rt-chart"), {
                 type: "bar",
                 data: {
