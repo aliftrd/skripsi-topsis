@@ -16,7 +16,7 @@
                 @enderror
             </div>
             <div class="form-group">
-                <label for="email">{{ __('profile.field.name') }}</label>
+                <label for="email">{{ __('profile.field.email') }}</label>
                 <input type="email" name="email" id="email"
                     class="form-control @error('email') is-invalid @enderror" value="{{ auth()->user()->email }}" required>
                 @error('email')

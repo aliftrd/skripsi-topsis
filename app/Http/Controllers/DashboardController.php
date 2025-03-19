@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Citizen;
+use App\Models\CitizenStage;
 use App\Models\Criteria;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -15,7 +17,11 @@ class DashboardController extends Controller
     {
         $totalCitizen = Citizen::count();
         $totalCriteria = Criteria::count();
-        $groupedCitizenByStage = Citizen::selectRaw('stage, COUNT(*) as total')
+        $availableYears = $this->getAvailableYear();
+        $year = $request->input('year', max($availableYears));
+
+        $groupedCitizenByStage = CitizenStage::where('year', $year)
+            ->selectRaw('stage, COUNT(*) as total')
             ->groupBy('stage')
             ->get();
         $groupedCitizenByRT = Citizen::selectRaw("rt, COUNT(*) as total")
@@ -23,6 +29,23 @@ class DashboardController extends Controller
             ->get();
         $tenCitizens = Citizen::latest()->take(10)->get();
 
-        return view('app.dashboard', compact('totalCitizen', 'totalCriteria', 'tenCitizens', 'groupedCitizenByStage', 'groupedCitizenByRT'));
+        return view('app.dashboard', compact('totalCitizen', 'totalCriteria', 'tenCitizens', 'groupedCitizenByStage', 'groupedCitizenByRT', 'availableYears'));
+    }
+
+    private function getAvailableYear()
+    {
+        $availableYears = CitizenStage::distinct()
+            ->pluck('year')
+            ->toArray();
+
+        $maxYear = !empty($availableYears) ? max($availableYears) : now()->year;
+
+        $targetYears = range($maxYear, $maxYear + 2);
+
+        $availableYears = array_unique(array_merge($availableYears, $targetYears));
+
+        sort($availableYears);
+
+        return $availableYears;
     }
 }

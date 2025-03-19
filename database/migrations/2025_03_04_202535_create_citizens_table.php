@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('code')->primary()->unique();
             $table->unsignedBigInteger('nik')->unique();
             $table->string('name');
-            $table->unsignedInteger('stage')->nullable();
             $table->unsignedInteger('rt');
             $table->unsignedInteger('rw');
             $table->string('province');

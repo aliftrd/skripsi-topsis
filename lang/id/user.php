@@ -6,12 +6,10 @@ return [
     | Form fields
     |--------------------------------------------------------------------------
     */
+    'field.no' => 'No',
     'field.name' => 'Nama',
     'field.email' => 'Email',
     'field.password' => 'Password',
-    'field.old_password' => 'Password Lama',
-    'field.new_password' => 'Password Baru',
-    'field.confirm_password' => 'Konfirmasi Password',
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +19,9 @@ return [
 
     'columns.no' => 'No',
     'columns.name' => 'Nama',
+    'columns.email' => 'Email',
     'columns.action' => 'Aksi',
+    'columns.empty' => 'Tidak ada data',
 
     /*
     |--------------------------------------------------------------------------
@@ -29,7 +29,6 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.label' => 'Profil',
-    'nav.profile.label' => 'Profil',
-    'nav.update-password.label' => 'Ubah password'
+    'nav.label' => 'Pengguna',
+    'nav.table.title' => 'Daftar Tabel Pengguna',
 ];

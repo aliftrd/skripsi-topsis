@@ -29,4 +29,9 @@ class Citizen extends Model
         return $this->belongsToMany(SubCriteria::class, 'citizen_has_criterias', 'citizen_code', 'sub_criteria_code')
             ->with('criteria');
     }
+
+    public function stages()
+    {
+        return $this->hasMany(CitizenStage::class, 'citizen_code', 'code');
+    }
 }

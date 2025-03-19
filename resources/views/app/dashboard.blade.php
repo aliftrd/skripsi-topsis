@@ -28,12 +28,36 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ __('dashboard.label.number-per-stage') }}</h5>
-                    <canvas id="stage-chart">Your browser does not support the canvas element.</canvas>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ __('dashboard.label.number-per-stage') }}</h5>
+                        <form action="{{ route('dashboard') }}" method="get">
+                            <div class="input-group">
+                                <select name="year" id="year" class="form-control" required>
+                                    <option selected disabled>{{ __('general.label.select.default') }}</option>
+                                    @foreach ($availableYears as $value)
+                                        <option value="{{ $value }}"
+                                            {{ request()->input('year') != $value ?: 'selected' }}>{{ $value }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        {{ __('general.actions.search') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    @if (!$groupedCitizenByStage->isEmpty())
+                        <canvas id="stage-chart">Your browser does not support the canvas element.</canvas>
+                    @else
+                        <p>{{ __('general.label.unavailable') }}</p>
+                    @endif
                 </div>
             </div>
         </div>

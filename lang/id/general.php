@@ -29,6 +29,7 @@ return [
     'actions.back' => 'Kembali',
     'actions.close' => 'Tutup',
     'actions.import' => 'Impor',
+    'actions.search' => 'Cari',
     'actions.download.example' => 'Download Format',
     'actions.save' => 'Simpan',
     'actions.create' => 'Buat',

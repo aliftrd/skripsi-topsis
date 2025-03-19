@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('citizen_has_criterias', function (Blueprint $table) {
+        Schema::create('citizen_stages', function (Blueprint $table) {
+            $table->id();
             $table->string('citizen_code');
-            $table->string('sub_criteria_code');
+            $table->unsignedBigInteger('stage');
+            $table->unsignedBigInteger('year');
 
             $table->foreign('citizen_code')->references('code')->on('citizens')->cascadeOnDelete();
-            $table->foreign('sub_criteria_code')->references('code')->on('sub_criterias')->cascadeOnDelete();
         });
     }
 
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('citizen_has_criterias');
+        Schema::dropIfExists('citizen_stages');
     }
 };

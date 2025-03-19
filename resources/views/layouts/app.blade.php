@@ -44,6 +44,12 @@
                 'is_active' => request()->routeIs('citizen.*'),
             ],
             [
+                'route' => 'user.index',
+                'icon' => 'user-group',
+                'label' => __('user.nav.label'),
+                'is_active' => request()->routeIs('user.*'),
+            ],
+            [
                 'route' => 'assessment',
                 'icon' => 'clipboard-document-check',
                 'label' => __('assessment.nav.label'),
