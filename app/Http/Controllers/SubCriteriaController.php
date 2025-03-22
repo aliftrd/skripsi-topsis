@@ -5,10 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Criteria;
 use App\Models\SubCriteria;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Validation\Rule;
 
-class SubCriteriaController extends Controller
+class SubCriteriaController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            'adminOnly',
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */

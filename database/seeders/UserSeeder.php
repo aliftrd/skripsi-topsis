@@ -13,10 +13,14 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@topsis.dev',
-            'password' => bcrypt('alifgg12'),
-        ]);
+        User::updateOrCreate(
+            ['id' => 1],
+            [
+                'name' => 'Admin',
+                'email' => 'admin@topsis.dev',
+                'password' => bcrypt('12345678'),
+                'role' => 1,
+            ]
+        );
     }
 }

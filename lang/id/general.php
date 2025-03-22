@@ -35,6 +35,7 @@ return [
     'actions.create' => 'Buat',
     'actions.create_and_add_another' => 'Buat & buat lainnya',
     'actions.edit' => 'Ubah',
+    'actions.show' => 'Lihat',
     'actions.cancel' => 'Batal',
     'actions.delete' => 'Hapus',
 

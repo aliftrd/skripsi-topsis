@@ -9,6 +9,7 @@ return [
     'field.no' => 'No',
     'field.name' => 'Nama',
     'field.email' => 'Email',
+    'field.role' => 'Role',
     'field.password' => 'Password',
 
     /*
@@ -20,6 +21,7 @@ return [
     'columns.no' => 'No',
     'columns.name' => 'Nama',
     'columns.email' => 'Email',
+    'columns.role' => 'Role',
     'columns.action' => 'Aksi',
     'columns.empty' => 'Tidak ada data',
 

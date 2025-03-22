@@ -4,10 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Criteria;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Validation\Rule;
 
-class CriteriaController extends Controller
+class CriteriaController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('adminOnly', only: ['create', 'store', 'edit',  'update', 'destroy'])
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -61,7 +73,10 @@ class CriteriaController extends Controller
      */
     public function show(Criteria $criteria)
     {
-        //
+        $criteria->load('subcriterias');
+        $subcriterias = $criteria->subcriterias()->paginate(10);
+
+        return view('app.criteria.show', compact('criteria', 'subcriterias'));
     }
 
     /**

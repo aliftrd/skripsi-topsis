@@ -48,9 +48,13 @@
                                                 {{ ($citizens->currentpage() - 1) * $citizens->perpage() + $loop->index + 1 }}
                                             </td>
                                             <td>
-                                                <a href="{{ route('citizen.edit', $citizen->code) }}">
+                                                @if (Auth::user()->isAdmin())
+                                                    <a href="{{ route('citizen.edit', $citizen->code) }}">
+                                                        {{ $citizen->name }}
+                                                    </a>
+                                                @else
                                                     {{ $citizen->name }}
-                                                </a>
+                                                @endif
                                             </td>
                                             @foreach ($criterias as $criteria)
                                                 <td>

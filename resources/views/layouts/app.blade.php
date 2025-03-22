@@ -48,6 +48,7 @@
                 'icon' => 'user-group',
                 'label' => __('user.nav.label'),
                 'is_active' => request()->routeIs('user.*'),
+                'hidden' => !Auth::user()->isAdmin(),
             ],
             [
                 'route' => 'assessment',
@@ -70,17 +71,20 @@
                     Apps
                 </li>
                 @foreach ($routes as $route)
-                    <li>
-                        <a href="{{ route($route['route']) }}" class="d-flex {{ $route['is_active'] ? 'active' : '' }}">
-                            @php
-                                $iconComponent = $route['is_active']
-                                    ? 'heroicon-s-' . $route['icon']
-                                    : 'heroicon-o-' . $route['icon'];
-                            @endphp
-                            <x-dynamic-component :component="$iconComponent" />
-                            <span class="pl-3">{{ $route['label'] }}</span>
-                        </a>
-                    </li>
+                    @if (!isset($route['hidden']) || !$route['hidden'])
+                        <li>
+                            <a href="{{ route($route['route']) }}"
+                                class="d-flex {{ $route['is_active'] ? 'active' : '' }}">
+                                @php
+                                    $iconComponent = $route['is_active']
+                                        ? 'heroicon-s-' . $route['icon']
+                                        : 'heroicon-o-' . $route['icon'];
+                                @endphp
+                                <x-dynamic-component :component="$iconComponent" />
+                                <span class="pl-3">{{ $route['label'] }}</span>
+                            </a>
+                        </li>
+                    @endif
                 @endforeach
             </ul>
         </div>

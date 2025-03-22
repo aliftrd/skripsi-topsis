@@ -57,10 +57,25 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="role">{{ __('user.field.role') }}</label>
+                            <select name="role" class="form-control @error('role') is-invalid @enderror" id="role"
+                                required>
+                                <option selected disabled>{{ __('general.label.select.default') }}</option>
+                                @foreach (App\Enums\UserRoleEnums::cases() as $role)
+                                    <option value="{{ $role }}"
+                                        {{ isset($user) && $user->role == $role ? 'selected' : '' }}>
+                                        {{ $role->getLabel() }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="password">{{ __('user.field.password') }}</label>
-                            <input type="number" name="password"
-                                class="form-control @error('password') is-invalid @enderror" id="password"
-                                value="{{ old('password', $user->password ?? '') }}" required>
+                            <input type="password" name="password"
+                                class="form-control @error('password') is-invalid @enderror" id="password" required>
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror

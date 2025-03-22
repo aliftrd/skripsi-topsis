@@ -23,10 +23,12 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <h5 class="card-title mr-auto mb-0">{{ __('user.nav.table.title') }}</h5>
-                        <a href="{{ route('user.create') }}" class="btn btn-primary d-flex">
-                            <x-heroicon-o-plus />
-                            <span class="pl-2">{{ __('general.actions.create') }}</span>
-                        </a>
+                        @if (Auth::user()->isAdmin())
+                            <a href="{{ route('user.create') }}" class="btn btn-primary d-flex">
+                                <x-heroicon-o-plus />
+                                <span class="pl-2">{{ __('general.actions.create') }}</span>
+                            </a>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -35,6 +37,7 @@
                                     <th scope="col">{{ __('user.columns.no') }}</th>
                                     <th scope="col">{{ __('user.columns.name') }}</th>
                                     <th scope="col">{{ __('user.columns.email') }}</th>
+                                    <th scope="col">{{ __('user.columns.role') }}</th>
                                     @if (!$users->isEmpty())
                                         <td>{{ __('user.columns.action') }}</td>
                                     @endif
@@ -53,6 +56,7 @@
                                             </td>
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
+                                            <td>{{ $user->role->getLabel() }}</td>
                                             <td>
                                                 <a href="{{ route('user.edit', $user->id) }}" class="btn btn-warning mb-2">
                                                     <x-heroicon-o-pencil width="14px" />
@@ -68,7 +72,6 @@
                                                         <span class="pl-2">{{ __('general.actions.delete') }}</span>
                                                     </button>
                                                 </form>
-
                                             </td>
                                         </tr>
                                     @endforeach

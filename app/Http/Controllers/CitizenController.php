@@ -6,12 +6,24 @@ use App\Imports\CitizensImport;
 use App\Models\Citizen;
 use App\Models\Criteria;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
-class CitizenController extends Controller
+class CitizenController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('adminOnly', only: ['create', 'store', 'import', 'edit',  'update', 'destroy'])
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -113,7 +125,13 @@ class CitizenController extends Controller
      */
     public function show(Citizen $citizen)
     {
-        //
+        $citizen->load('subCriterias.criteria');
+        $selectedCriteria = $citizen->subCriterias->mapWithKeys(function ($subCriteria) {
+            return [$subCriteria->criteria->code => $subCriteria->code];
+        })->toArray();
+        $criterias = Criteria::orderByRaw('LENGTH(code), code')->get();
+
+        return view('app.citizen.show', compact('citizen', 'criterias', 'selectedCriteria'));
     }
 
     /**

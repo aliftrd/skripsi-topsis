@@ -2,11 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnums;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
+    {
+        return [
+            'adminOnly'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -30,7 +45,36 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate(
+            rules: [
+                'name' => 'required',
+                'email' => [
+                    'required',
+                    Rule::unique(User::class),
+                ],
+                'role' => [
+                    'required',
+                    Rule::enum(UserRoleEnums::class),
+                ],
+                'password' => [
+                    'required',
+                    Password::default(),
+                ],
+            ],
+            attributes: [
+                'name' => __('user.field.name'),
+                'email' => __('user.field.email'),
+                'role' => __('user.field.role'),
+                'password' => __('user.field.password'),
+            ]
+        );
+
+        User::create($validated);
+
+        $request->session()->flash('success', __('general.notifications.created'));
+        return $request->continue ?
+            redirect()->route('user.create') :
+            redirect()->route('user.index');
     }
 
     /**
@@ -62,6 +106,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if (User::where('role', 1)->count() <= 1) return redirect()->route('user.index')->with('error', __('general.notifications.error'));
+
+        $user->delete();
+
+        return redirect()->route('user.index')->with('success', __('general.notifications.deleted'));
     }
 }

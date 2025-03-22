@@ -23,19 +23,20 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center  mb-3">
                         <h5 class="card-title mr-auto mb-0">{{ __('criteria.nav.table.title') }}</h5>
-                        <a href="{{ route('criteria.create') }}" class="btn btn-primary d-flex">
-                            <x-heroicon-o-plus />
-                            <span class="pl-2">{{ __('general.actions.create') }}</span>
-                        </a>
+                        @if (Auth::user()->isAdmin())
+                            <a href="{{ route('criteria.create') }}" class="btn btn-primary d-flex">
+                                <x-heroicon-o-plus />
+                                <span class="pl-2">{{ __('general.actions.create') }}</span>
+                            </a>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">{{ __('criteria.columns.no') }}</th>
-                                    <th scope="col">{{ __('criteria.columns.code') }}</th>
-                                    <th scope="col">{{ __('criteria.columns.description') }}</th>
-                                    <th scope="col">{{ __('criteria.columns.weight') }}</th>
+                                    <td scope="col">{{ __('criteria.columns.code') }}</td>
+                                    <td scope="col">{{ __('criteria.columns.description') }}</td>
+                                    <td scope="col">{{ __('criteria.columns.weight') }}</td>
                                     @if (!$criterias->isEmpty())
                                         <td>{{ __('criteria.columns.action') }}</td>
                                     @endif
@@ -44,33 +45,37 @@
                             <tbody>
                                 @if ($criterias->isEmpty())
                                     <tr>
-                                        <td colspan="4" class="text-center">{{ __('criteria.columns.empty') }}</td>
+                                        <td colspan="3" class="text-center">{{ __('criteria.columns.empty') }}</td>
                                     </tr>
                                 @else
                                     @foreach ($criterias as $key => $criteria)
                                         <tr>
-                                            <td>
-                                                {{ ($criterias->currentpage() - 1) * $criterias->perpage() + $loop->index + 1 }}
-                                            </td>
                                             <td>{{ $criteria->code }}</td>
                                             <td>{{ $criteria->name }}</td>
                                             <td>{{ $criteria->weight }}</td>
                                             <td>
-                                                <a href="{{ route('criteria.edit', $criteria->code) }}"
-                                                    class="btn btn-warning mb-2">
-                                                    <x-heroicon-o-pencil width="14px" />
-                                                    <span class="pl-2">{{ __('general.actions.edit') }}</span>
+                                                <a href="{{ route('criteria.show', $criteria->code) }}"
+                                                    class="btn btn-info mb-2">
+                                                    <x-heroicon-o-eye width="14px" />
+                                                    <span class="pl-2">{{ __('general.actions.show') }}</span>
                                                 </a>
-                                                <form action="{{ route('criteria.destroy', $criteria->code) }}"
-                                                    method="POST" class="delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger delete-button"
-                                                        data-id="{{ $criteria->code }}">
-                                                        <x-heroicon-o-trash width="14px" />
-                                                        <span class="pl-2">{{ __('general.actions.delete') }}</span>
-                                                    </button>
-                                                </form>
+                                                @if (Auth::user()->isAdmin())
+                                                    <a href="{{ route('criteria.edit', $criteria->code) }}"
+                                                        class="btn btn-warning mb-2">
+                                                        <x-heroicon-o-pencil width="14px" />
+                                                        <span class="pl-2">{{ __('general.actions.edit') }}</span>
+                                                    </a>
+                                                    <form action="{{ route('criteria.destroy', $criteria->code) }}"
+                                                        method="POST" class="delete-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger delete-button"
+                                                            data-id="{{ $criteria->code }}">
+                                                            <x-heroicon-o-trash width="14px" />
+                                                            <span class="pl-2">{{ __('general.actions.delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

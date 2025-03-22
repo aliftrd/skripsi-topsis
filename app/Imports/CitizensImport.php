@@ -36,15 +36,14 @@ class CitizensImport implements ToCollection, WithHeadingRow
                 ]
             );
 
-            if (!empty($rowArray['tahap'])) {
-                [$stage, $year] = explode(':', $rowArray['tahap']) + [null, null];
+            if (!empty($rowArray['tahun'])) {
+                $stage = $rowArray['tahap'];
+                $year = $rowArray['tahun'];
 
-                if ($stage && $year) {
-                    $citizen->stages()->updateOrCreate(
-                        ['citizen_code' => $citizen->code, 'stage' => $stage],
-                        ['year' => $year]
-                    );
-                }
+                $citizen->stages()->updateOrCreate(
+                    ['citizen_code' => $citizen->code, 'stage' => $stage],
+                    ['year' => $year]
+                );
             }
 
             $criteriaData = Arr::except($rowArray, ['code', 'nik', 'nama', 'tahap', 'provinsi', 'kabupaten', 'kecamatan', 'kelurahan', 'alamat']);

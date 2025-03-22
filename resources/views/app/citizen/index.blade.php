@@ -23,15 +23,17 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <h5 class="card-title mr-auto mb-0">{{ __('citizen.nav.table.title') }}</h5>
-                        <button type="button" class="btn btn-success d-flex mr-2" data-toggle="modal"
-                            data-target="#importModal">
-                            <x-heroicon-o-arrow-up-tray />
-                            <span class="pl-2">{{ __('general.actions.import') }}</span>
-                        </button>
-                        <a href="{{ route('citizen.create') }}" class="btn btn-primary d-flex">
-                            <x-heroicon-o-plus />
-                            <span class="pl-2">{{ __('general.actions.create') }}</span>
-                        </a>
+                        @if (Auth::user()->isAdmin())
+                            <button type="button" class="btn btn-success d-flex mr-2" data-toggle="modal"
+                                data-target="#importModal">
+                                <x-heroicon-o-arrow-up-tray />
+                                <span class="pl-2">{{ __('general.actions.import') }}</span>
+                            </button>
+                            <a href="{{ route('citizen.create') }}" class="btn btn-primary d-flex">
+                                <x-heroicon-o-plus />
+                                <span class="pl-2">{{ __('general.actions.create') }}</span>
+                            </a>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -75,22 +77,28 @@
                                             <td>{{ $citizen->village }}</td>
                                             <td>{{ $citizen->address }}</td>
                                             <td>
-                                                <a href="{{ route('citizen.edit', $citizen->code) }}"
-                                                    class="btn btn-warning mb-2">
-                                                    <x-heroicon-o-pencil width="14px" />
-                                                    <span class="pl-2">{{ __('general.actions.edit') }}</span>
+                                                <a href="{{ route('citizen.show', $citizen->code) }}"
+                                                    class="btn btn-info mb-2">
+                                                    <x-heroicon-o-eye width="14px" />
+                                                    <span class="pl-2">{{ __('general.actions.show') }}</span>
                                                 </a>
-                                                <form action="{{ route('citizen.destroy', $citizen->code) }}"
-                                                    method="POST" class="delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger delete-button"
-                                                        data-id="{{ $citizen->code }}">
-                                                        <x-heroicon-o-trash width="14px" />
-                                                        <span class="pl-2">{{ __('general.actions.delete') }}</span>
-                                                    </button>
-                                                </form>
-
+                                                @if (Auth::user()->isAdmin())
+                                                    <a href="{{ route('citizen.edit', $citizen->code) }}"
+                                                        class="btn btn-warning mb-2">
+                                                        <x-heroicon-o-pencil width="14px" />
+                                                        <span class="pl-2">{{ __('general.actions.edit') }}</span>
+                                                    </a>
+                                                    <form action="{{ route('citizen.destroy', $citizen->code) }}"
+                                                        method="POST" class="delete-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger delete-button"
+                                                            data-id="{{ $citizen->code }}">
+                                                            <x-heroicon-o-trash width="14px" />
+                                                            <span class="pl-2">{{ __('general.actions.delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

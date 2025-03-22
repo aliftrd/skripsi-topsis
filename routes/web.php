@@ -7,7 +7,6 @@ use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RatingValueController;
 use App\Http\Controllers\SubCriteriaController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('criteria')->name('criteria.')->group(function () {
         Route::resource('/', CriteriaController::class, [
             'parameters' => ['' => 'criteria:code']
-        ])->except(['show']);
+        ]);
 
         Route::resource('{criteria}/sub-criteria', SubCriteriaController::class)
             ->parameters(['sub-criteria' => 'subcriteria'])
@@ -34,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('citizen')->name('citizen.')->group(function () {
         Route::resource('/', CitizenController::class, [
             'parameters' => ['' => 'citizen:code']
-        ])->except(['show']);
+        ]);
 
         Route::post('/import', [CitizenController::class, 'import'])->name('import');
     });
