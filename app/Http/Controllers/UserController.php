@@ -140,7 +140,11 @@ class UserController extends Controller implements HasMiddleware
      */
     public function destroy(User $user)
     {
-        if (User::where('role', 1)->count() <= 1) return redirect()->route('user.index')->with('error', __('general.notifications.error'));
+        $adminCount = User::where('role', UserRoleEnums::ADMIN)->count();
+
+        if ($user->role->value == 1 && $adminCount <= 1) {
+            return redirect()->route('user.index')->with('error', __('general.notifications.error'));
+        }
 
         $user->delete();
 
