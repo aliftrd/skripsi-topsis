@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
@@ -98,7 +99,40 @@ class UserController extends Controller implements HasMiddleware
      */
     public function update(Request $request, User $user)
     {
-        //
+        $validated = $request->validate(
+            rules: [
+                'name' => 'required',
+                'email' => [
+                    'required',
+                    Rule::unique(User::class)->ignore($user->id),
+                ],
+                'role' => [
+                    'required',
+                    Rule::enum(UserRoleEnums::class),
+                ],
+                'password' => [
+                    'nullable',
+                    Password::default(),
+                ],
+            ],
+            attributes: [
+                'name' => __('user.field.name'),
+                'email' => __('user.field.email'),
+                'role' => __('user.field.role'),
+                'password' => __('user.field.password'),
+            ]
+        );
+
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
+
+        $request->session()->flash('success', __('general.notifications.updated'));
+        return redirect()->route('user.index');
     }
 
     /**

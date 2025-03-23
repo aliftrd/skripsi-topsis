@@ -75,7 +75,8 @@
                         <div class="form-group">
                             <label for="password">{{ __('user.field.password') }}</label>
                             <input type="password" name="password"
-                                class="form-control @error('password') is-invalid @enderror" id="password" required>
+                                class="form-control @error('password') is-invalid @enderror" id="password"
+                                @unless (isset($user)) required @endunless>
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
