@@ -48,7 +48,7 @@
                 'icon' => 'user-group',
                 'label' => __('user.nav.label'),
                 'is_active' => request()->routeIs('user.*'),
-                'hidden' => !Auth::user()->isAdmin(),
+                'hidden' => !Auth::user()->isAdmin() && !Auth::user()->isSAdmin(),
             ],
             [
                 'route' => 'assessment',
@@ -57,10 +57,10 @@
                 'is_active' => request()->routeIs('assessment'),
             ],
             [
-                'route' => 'calculation',
+                'route' => 'calculation.index',
                 'icon' => 'calculator',
                 'label' => __('calculation.nav.label'),
-                'is_active' => request()->is('calculation'),
+                'is_active' => request()->routeIs('calculation.*'),
             ],
         ];
     @endphp

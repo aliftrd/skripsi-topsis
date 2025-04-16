@@ -40,7 +40,11 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::get('assessment', AssessmentController::class)->name('assessment');
-    Route::get('calculation', CalculationController::class)->name('calculation');
+
+    Route::prefix('calculation')->name('calculation.')->group(function () {
+        Route::get('/', CalculationController::class)->name('index');
+        Route::get('/export', [CalculationController::class, 'export'])->name('export');
+    });
 
     Route::resource('user', UserController::class);
     Route::group(['prefix' => 'profile', 'as' => 'profile.'], function () {

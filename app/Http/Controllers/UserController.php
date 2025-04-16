@@ -140,9 +140,10 @@ class UserController extends Controller implements HasMiddleware
      */
     public function destroy(User $user)
     {
-        $adminCount = User::where('role', UserRoleEnums::ADMIN)->count();
+        // check if there is only one super admin
+        $superAdminCount = User::where('role', UserRoleEnums::SADMIN)->count();
 
-        if ($user->role->value == 1 && $adminCount <= 1) {
+        if ($user->role->value == UserRoleEnums::SADMIN->value && $superAdminCount <= 1) {
             return redirect()->route('user.index')->with('error', __('general.notifications.error'));
         }
 

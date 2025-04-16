@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->role == UserRoleEnums::ADMIN;
     }
+
+    public function isSAdmin(): bool
+    {
+        return $this->role == UserRoleEnums::SADMIN;
+    }
 }

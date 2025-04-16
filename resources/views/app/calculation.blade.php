@@ -16,9 +16,14 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center  mb-3">
                         <h5 class="card-title mr-auto mb-0">{{ __('calculation.nav.table.ranks') }}</h5>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            {{ __('calculation.nav.label.detail') }}
-                        </button>
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('calculation.export') }}" class="btn btn-success">
+                                {{ __('general.actions.export') }}
+                            </a>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                {{ __('calculation.nav.label.detail') }}
+                            </button>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">

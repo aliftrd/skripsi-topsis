@@ -23,7 +23,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-3">
                         <h5 class="card-title mr-auto mb-0">{{ __('user.nav.table.title') }}</h5>
-                        @if (Auth::user()->isAdmin())
+                        @if (Auth::user()->isAdmin() || Auth::user()->isSAdmin())
                             <a href="{{ route('user.create') }}" class="btn btn-primary d-flex">
                                 <x-heroicon-o-plus />
                                 <span class="pl-2">{{ __('general.actions.create') }}</span>
@@ -62,16 +62,40 @@
                                                     <x-heroicon-o-pencil width="14px" />
                                                     <span class="pl-2">{{ __('general.actions.edit') }}</span>
                                                 </a>
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST"
-                                                    class="delete-form">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button" class="btn btn-danger delete-button"
-                                                        data-id="{{ $user->id }}">
-                                                        <x-heroicon-o-trash width="14px" />
-                                                        <span class="pl-2">{{ __('general.actions.delete') }}</span>
-                                                    </button>
-                                                </form>
+
+                                                @php
+                                                    $authUser = Auth::user();
+                                                    $userRole = $user->role->value;
+                                                    $canDelete = false;
+
+                                                    if (
+                                                        $authUser->isSAdmin() &&
+                                                        $userRole != App\Enums\UserRoleEnums::SADMIN->value
+                                                    ) {
+                                                        // Super admin can delete any user except other super admins
+                                                        $canDelete = true;
+                                                    } elseif (
+                                                        $authUser->isAdmin() &&
+                                                        $userRole != App\Enums\UserRoleEnums::ADMIN->value &&
+                                                        $userRole != App\Enums\UserRoleEnums::SADMIN->value
+                                                    ) {
+                                                        // Admin can delete regular users, but not admins or super admins
+                                                        $canDelete = true;
+                                                    }
+                                                @endphp
+
+                                                @if ($canDelete)
+                                                    <form action="{{ route('user.destroy', $user->id) }}" method="POST"
+                                                        class="delete-form">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" class="btn btn-danger delete-button"
+                                                            data-id="{{ $user->id }}">
+                                                            <x-heroicon-o-trash width="14px" />
+                                                            <span class="pl-2">{{ __('general.actions.delete') }}</span>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

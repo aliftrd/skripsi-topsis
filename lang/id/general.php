@@ -38,7 +38,7 @@ return [
     'actions.show' => 'Lihat',
     'actions.cancel' => 'Batal',
     'actions.delete' => 'Hapus',
-
+    'actions.export' => 'Ekspor',
     /*
     |--------------------------------------------------------------------------
     | Notifications
